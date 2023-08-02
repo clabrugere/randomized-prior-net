@@ -2,9 +2,11 @@
 
 Inspired by [Randomized Prior Functions for Deep Reinforcement Learning](https://arxiv.org/pdf/1806.03335.pdf) and [Training Independent Subnetworks for Robust Predictions](https://arxiv.org/pdf/2010.06610.pdf), this repository contains a tensorflow implementation of a model capable of providing a measure of uncertainty in its predictions.
 
+![Architecture](resources/algorithm.png)
+
 It is both conceptually and technically simple: an ensemble of distinct subnetworks is trained in the same forward-backward pass. Each one outputs its own prediction while the error is backpropagated from the sum of their respective losses. It allows performing a form of deep ensembling while only adding a very small computational overhead. In addition, each subnetwork contains a layer of frozen weights acting as fixed priors that the encoders learn to compensate.
 
-The two sources of randomness (frozen prior nets and learnable encoders) provide some sort of bagging, making the result more robust and allowing to measure uncertainty as the spread of the subnetworks' predictions around the mean.
+The two sources of randomness (frozen prior nets and learnable encoders) provide some sort of bagging, making the result more robust and allowing to measure uncertainty as the spread of the subnetworks' predictions around the mean. It could be further improved by providing bootstrapped batches during the training.
 
 The example provided is adapted to regression problems, but the logic can easily be adapted to binary/multi-class classification tasks.
 
