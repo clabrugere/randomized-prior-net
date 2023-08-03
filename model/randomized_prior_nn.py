@@ -91,10 +91,10 @@ class RandomizedPrioNet(tf.keras.Model):
 
         return tf.concat(out, axis=-1)
 
-    def predict(self, inputs, batch_size, alpha=0.05):
+    def predict(self, inputs, batch_size, confidence=0.95):
         y_pred = super().predict(inputs, batch_size)
         mean = np.mean(y_pred, axis=1)
-        se = np.std(y_pred, axis=1, ddof=1) / np.sqrt(self.num_subnetworks)
-        bound = stats.t.ppf(1 - alpha / 2, self.num_subnetworks - 1) * se
+        se = np.std(y_pred, axis=1) / np.sqrt(self.num_subnetworks)
+        bound = stats.t.ppf((1 + confidence) / 2, self.num_subnetworks - 1) * se
 
         return mean, np.stack((mean - bound, mean + bound), axis=1)
